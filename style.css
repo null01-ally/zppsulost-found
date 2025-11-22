@@ -1,0 +1,308 @@
+:root{
+    --bg: #f4f6f8;
+    --primary: #0077b6;
+    --primary-dark: #023e8a;
+    --accent: #0096c7;
+    --danger: #d32f2f;
+    --muted: #666;
+    --text: #333;
+    --card-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    --radius: 8px;
+    --container-width: 1000px;
+    --gap: 1rem;
+    --input-border: #ccc;
+
+    /* footer sizing */
+    --footer-height: 64px;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+
+    /* sticky-footer layout:
+       - make body a column flex container that fills the viewport
+       - let the main content (.container) grow so footer sits at viewport bottom
+         when content is short and participates in scroll when content is tall
+    */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-bottom: 0; /* no fixed footer reserve needed */
+}
+
+/* ensure the main content area grows to push footer down */
+.container {
+    width: 92%;
+    max-width: var(--container-width);
+    margin: 1.5rem auto;
+    flex: 1 0 auto; /* <-- allow .container to take remaining space */
+}
+
+/* Header */
+header {
+    background: var(--primary);
+    color: #fff;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-logo {
+    height: 60px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.6rem;
+}
+
+header p {
+    margin: 0.2rem 0 0;
+    opacity: 0.9;
+}
+
+/* Navigation */
+nav {
+    background: var(--primary-dark);
+    padding: 0.6rem;
+    text-align: center;
+}
+
+nav a {
+    color: #fff;
+    margin: 0 0.8rem;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+}
+
+nav a:hover {
+    opacity: 0.8;
+}
+
+/* Forms / Inputs */
+form {
+    background: #fff;
+    padding: 1rem;
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 0.55rem;
+    margin: 0.35rem 0;
+    border: 1px solid var(--input-border);
+    border-radius: 6px;
+}
+
+/* Buttons */
+button,
+.btn {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 0.55rem 0.9rem;
+    border-radius: 6px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn.secondary { background: var(--accent); }
+.btn.danger    { background: var(--danger); }
+
+/* smooth transitions and blue hover highlight for buttons */
+.btn, .search-btn, .report-btn {
+    transition: background-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.btn:hover, .search-btn:hover, .report-btn:hover,
+.btn:focus, .search-btn:focus, .report-btn:focus {
+    background-color: var(--primary);
+    color: #fff;
+    border-color: var(--primary-dark);
+    transform: translateY(-1px);
+    outline: none;
+}
+
+/* Grid & Cards */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem; /* ensure space above cards */
+}
+
+.card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background: #eee;
+}
+
+.card .content {
+    padding: 0.9rem;
+}
+
+/* Status / metadata */
+.status {
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.status.claimed { color: #6c757d; }
+
+/* Actions & utilities */
+.actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.actions .btn {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.actions a.btn {
+    padding: 0.4rem 0.8rem;
+}
+
+/* Notices & messages */
+.notice {
+    background: #e8f4fd;
+    border: 1px solid #b3e5fc;
+    color: #024;
+    padding: 0.6rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 1rem;
+}
+
+/* Footer */
+footer {
+    /* no longer fixed; footer participates in page flow */
+    position: static;
+    text-align: center;
+    padding: 1rem;
+    background: #222;
+    color: #eee;
+    margin-top: 0; /* spacing is handled by content */
+}
+
+/* Search block layout */
+.search-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem; /* increase space below search block */
+}
+
+/* Input + Search button on same row */
+.search-block .search-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.search-block .search-input {
+    flex: 1;
+    padding: 0.5rem 0.6rem;
+    border: 2px solid var(--primary);
+    border-radius: 6px;
+    background: #fff;
+    margin: 0;
+    outline: none;
+}
+
+.search-block .search-input:focus {
+    border-color: var(--primary-dark);
+    box-shadow: 0 0 0 3px rgba(0,119,182,0.12);
+}
+
+/* Search button next to input */
+.search-block .search-btn {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.search-block .search-btn:hover {
+    filter: brightness(0.95);
+}
+
+/* Report button on bottom row, left-aligned */
+.search-block .report-btn {
+    background: transparent;                 /* minimalist, blends with background */
+    color: var(--primary-dark);              /* subtle, accessible text color */
+    border: 1px solid rgba(2,46,95,0.12);    /* light outline for affordance */
+    padding: 0.35rem 0.7rem;                 /* compact */
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    align-self: flex-start;                  /* keeps left alignment under search row */
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03);    /* tiny depth so it feels tangible */
+    transition: all 160ms ease;
+    margin-bottom: 0.6rem;                   /* breathing room from cards */
+}
+
+/* gentle hover/focus states */
+.search-block .report-btn:hover,
+.search-block .report-btn:focus {
+    background: rgba(2,119,182,0.06);
+    border-color: rgba(2,119,182,0.18);
+    transform: translateY(-1px);
+    outline: none;
+}
+
+/* mobile: full-width to feel natural on small screens */
+@media (max-width: 480px) {
+    .search-block .report-btn { width: 100%; text-align: center; }
+}

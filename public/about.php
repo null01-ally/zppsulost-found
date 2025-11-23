@@ -70,11 +70,11 @@
 
         <section class="team">
             <div class="member">
-                <img src="../image/daeniel.jpg" alt="DAENIEL RAE LABIO" class="avatar">
+                <img src="../public/image/daeniel.jpg" alt="DAENIEL RAE LABIO" class="avatar">
                 <div class="status">DAENIEL RAE LABIO</div>
             </div>
             <div class="member">
-                <img src="../image/angelene.jpg" alt="ANGELENE ALON" class="avatar">
+                <img src="../public/image/angelene.jpg" alt="ANGELENE ALON" class="avatar">
                 <div class="status">ANGELENE ALON</div>
             </div>
             <div class="member">
@@ -82,15 +82,15 @@
                 <div class="status">ANTHONY GARCIA</div>
             </div>
             <div class="member">
-                <img src="../image/jayralyn.jpg" alt="JAYRALYN GARUPIL" class="avatar">
+                <img src="../public/image/jayralyn.jpg" alt="JAYRALYN GARUPIL" class="avatar">
                 <div class="status">JAYRALYN GARUPIL</div>
             </div>
             <div class="member">
-                <img src="../image/nesreen.jpg" alt="NESREEN JULAILI" class="avatar">
+                <img src="../public/image/nesreen.jpg" alt="NESREEN JULAILI" class="avatar">
                 <div class="status">NESREEN JULAILI</div>
             </div>
             <div class="member">
-                <img src="../image/angel.jpg" alt="ANGEL CENABRE" class="avatar">
+                <img src="../public/image/angel.jpg" alt="ANGEL CENABRE" class="avatar">
                 <div class="status">ANGEL CENABRE</div>
             </div>
         </section>

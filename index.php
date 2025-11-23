@@ -45,7 +45,7 @@ $res = $stmt->get_result();
     <header>
         <img src="/FDSystem/public/image/zppsu-logo.png" alt="ZPPSU Logo" class="header-logo">
         <div style="width:100%">
-            <h1>ZPPSU Lost &amp; Found Corner</h1>
+            <h1>ZPPSU Lost &amp; Found Managemenet</h1>
             <p>HELPING STUDENTS RECOVER THEIR BELONGING</p>
         </div>
     </header>

@@ -1,0 +1,1 @@
+<footer><p>&copy; <?= date('Y') ?> The Lost Group</p></footer></body></html>

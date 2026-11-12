@@ -1,82 +1,28 @@
 <?php
-require_once '../db.php';
-
-$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-
-// Fetch item + reporter
-$stmt = $conn->prepare("SELECT items.*, users.name AS reporter_name, users.email AS reporter_email
-                        FROM items
-                        JOIN users ON users.id = items.reporter_id
-                        WHERE items.id = ?");
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$res = $stmt->get_result();
-$item = $res->fetch_assoc();
-$stmt->close();
-
-// Fetch claim info if already claimed
-$claim = null;
-if ($item) {
-    $stmt = $conn->prepare("SELECT claims.*, users.name AS claimer_name, users.email AS claimer_email
-                          FROM claims
-                          JOIN users ON users.id = claims.claimer_id
-                          WHERE claims.item_id = ?
-                          ORDER BY claims.id DESC LIMIT 1");
-    $stmt->bind_param("i", $item['id']);
-    $stmt->execute();
-    $res = $stmt->get_result();
-    $claim = $res->fetch_assoc();
-    $stmt->close();
-}
+require dirname(__DIR__).'/includes/app.php';
+$account=require_login();
+$id=(int)field($_GET,'id');
+$s=$conn->prepare('SELECT i.*,u.name AS reporter_name,u.email AS reporter_email FROM items i JOIN users u ON u.id=i.reporter_id WHERE i.id=?'); $s->bind_param('i',$id); $s->execute(); $item=$s->get_result()->fetch_assoc();
+if($item && $item['moderation_status']!=='approved' && !is_admin() && (int)$item['reporter_id']!==(int)$account['user_id'])$item=null;
+if(!$item) http_response_code(404);
+$prefix='../'; $title=$item ? $item['title'].' — ZPPSU' : 'Item not found'; require dirname(__DIR__).'/includes/header.php';
 ?>
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Item Details</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
-
-<body>
-    <header>
-        <h1>Item Details</h1>
-    </header>
-    <nav>
-        <a href="../index.php">Home</a>
-        <a href="create.php">Report Item</a>
-    </nav>
-
-    <div class="container">
-        <?php if (!$item): ?>
-            <div class="notice">Item not found.</div>
-        <?php else: ?>
-            <div class="card">
-                <img src="<?php echo $item['image_path'] ? '../uploads/' . htmlspecialchars($item['image_path']) : 'https://via.placeholder.com/600x400?text=No+Image'; ?>" alt="Item">
-                <div class="content">
-                    <div class="status <?php echo $item['status'] === 'claimed' ? 'claimed' : ''; ?>">
-                        Status: <?php echo strtoupper(htmlspecialchars($item['status'])); ?>
-                    </div>
-                    <h2><?php echo htmlspecialchars($item['title']); ?></h2>
-                    <p><?php echo nl2br(htmlspecialchars($item['description'])); ?></p>
-                    <p><strong>Location:</strong> <?php echo htmlspecialchars($item['location']); ?></p>
-                    <p><strong>Date reported:</strong> <?php echo htmlspecialchars($item['date_reported']); ?></p>
-                    <p><strong>Reporter:</strong> <?php echo htmlspecialchars($item['reporter_name']); ?> (<?php echo htmlspecialchars($item['reporter_email']); ?>)</p>
-
-                    <?php if ($claim): ?>
-                        <p><strong>Claimed by:</strong> <?php echo htmlspecialchars($claim['claimer_name']); ?> (<?php echo htmlspecialchars($claim['claimer_email']); ?>) on <?php echo htmlspecialchars($claim['claim_date']); ?></p>
-                    <?php endif; ?>
-
-                    <div class="actions">
-                        <?php if ($item['status'] !== 'claimed'): ?>
-                            <a class="btn" href="claim.php?id=<?php echo $item['id']; ?>">Mark as Claimed</a>
-                        <?php endif; ?>
-                        <a class="btn secondary" href="../index.php">Back</a>
-                        <a class="btn danger" href="delete.php?id=<?php echo $item['id']; ?>" onclick="return confirm('Delete this item?');">Delete</a>
-                    </div>
-                </div>
-            </div>
-        <?php endif; ?>
-    </div>
-</body>
-
-</html>
+<main class="container detail-page">
+<?php if(isset($_SESSION['notice'])): ?><p class="notice" role="status"><?= e($_SESSION['notice']) ?></p><?php unset($_SESSION['notice']); endif ?>
+<?php if(!$item): ?><div class="empty"><h2>Item not found</h2><a class="btn secondary" href="../index.php">Browse items</a></div>
+<?php else: $email=$item['contact_email'] ?: $item['reporter_email']; ?>
+<article class="card detail-card" aria-labelledby="item-title"><div class="detail-image"><img src="<?= e(image_url($item['image_path'],'../')) ?>" alt="<?= e($item['title']) ?>"></div><div class="content">
+    <div class="card-badges"><span class="status <?= e($item['status']) ?>"><?= e(ucfirst($item['status'])) ?></span><span class="category-tag"><?= e($item['category']) ?></span></div>
+    <h2 id="item-title"><?= e($item['title']) ?></h2><p class="full-description"><?= e($item['description']) ?></p>
+    <dl class="detail-metadata">
+        <div><dt>Location</dt><dd><?= e($item['location']) ?></dd></div>
+        <div><dt>Date lost / found</dt><dd><time datetime="<?= e($item['date_reported']) ?>"><?= e(date('M j, Y',strtotime($item['date_reported']))) ?></time></dd></div>
+        <div><dt>Report submitted</dt><dd><?= e(date('M j, Y, g:i:s A',strtotime($item['created_at']))) ?> <span class="metadata-timezone">(Asia/Manila)</span></dd></div>
+        <div><dt>Reporter</dt><dd><?= e($item['reporter_name']) ?></dd></div>
+        <div><dt>Email</dt><dd><?php if(filter_var($email,FILTER_VALIDATE_EMAIL)): ?><a href="<?= e('mailto:'.$email.'?subject='.rawurlencode('ZPPSU item #'.$id.': '.$item['title'])) ?>"><?= e($email) ?></a><?php else: ?>Not provided<?php endif ?></dd></div>
+        <?php if($item['contact_phone']): ?><div><dt>Phone</dt><dd><?= e($item['contact_phone']) ?></dd></div><?php endif ?>
+    </dl>
+    <div class="actions detail-actions"><?php if($item['status']!=='claimed' && $item['moderation_status']==='approved'): ?><a class="btn" href="claim.php?id=<?= $id ?>"><?= $item['status']==='found' ? 'Claim Item' : 'I Found This' ?></a><?php elseif($item['status']==='claimed'): ?><span class="resolved-note">This item has been recovered.</span><?php else: ?><span class="resolved-note">Review status: <?= e(ucfirst($item['moderation_status'])) ?></span><?php endif ?><a class="btn secondary" href="../index.php">Back to items</a></div>
+</div></article>
+<?php endif ?></main>
+<?php require dirname(__DIR__).'/includes/footer.php'; ?>

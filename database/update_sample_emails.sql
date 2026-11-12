@@ -1,0 +1,11 @@
+USE lost_found_db;
+START TRANSACTION;
+UPDATE users SET email='mika.santos.zppsu4827@gmail.com' WHERE email='mika.demo@example.invalid';
+UPDATE items SET contact_email='mika.santos.zppsu4827@gmail.com' WHERE contact_email='mika.demo@example.invalid';
+UPDATE users SET email='alex.reyes.zppsu6139@gmail.com' WHERE email='alex.demo@example.invalid';
+UPDATE items SET contact_email='alex.reyes.zppsu6139@gmail.com' WHERE contact_email='alex.demo@example.invalid';
+UPDATE users SET email='jamie.cruz.zppsu7524@gmail.com' WHERE email='jamie.demo@example.invalid';
+UPDATE items SET contact_email='jamie.cruz.zppsu7524@gmail.com' WHERE contact_email='jamie.demo@example.invalid';
+UPDATE users SET email='sam.ramos.zppsu9368@gmail.com' WHERE email='sam.demo@example.invalid';
+UPDATE items SET contact_email='sam.ramos.zppsu9368@gmail.com' WHERE contact_email='sam.demo@example.invalid';
+COMMIT;

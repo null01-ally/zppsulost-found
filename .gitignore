@@ -1,0 +1,6 @@
+
+# Private claimant evidence must never be committed.
+database/verification/
+
+# Local pre-upgrade backups may contain account data.
+/database/before*.sql

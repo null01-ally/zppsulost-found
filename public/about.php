@@ -1,14 +1,6 @@
-<?php // simple static About page - place in public/ so navbar link works 
-?>
-<!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>About Us - Lost & Found</title>
-    <link rel="stylesheet" href="../style.css">
-    <style>
+<?php require dirname(__DIR__).'/includes/app.php';
+$account=require_login(); $prefix='../'; $title='About Us'; require dirname(__DIR__).'/includes/header.php'; ?>
+<style>
         /* small page-specific helpers */
         .hero {
             padding: 3rem 0 1.5rem;
@@ -44,25 +36,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
-    </style>
-</head>
-
-<body>
-    <header>
-        <img src="/FDSystem/public/image/zppsu-logo.png" alt="ZPPSU Logo" class="header-logo">
-        <div style="width:100%">
-            <h1>ZPPSU Lost & Found Corner</h1>
-            <p>HELPING STUDENTS RECOVER THEIR BELONGING</p>
-        </div>
-    </header>
-
-    <nav>
-        <a href="../index.php">Home</a>
-        <a href="contact.php">Contact</a>
-        <a href="about.php">About Us</a>
-    </nav>
-
-    <div class="container">
+    </style><div class="container">
         <section class="hero">
             <h2>Meet Our Team</h2>
             <p class="notice">A small team dedicated to helping students report and recover lost items quickly and safely.</p>
@@ -104,9 +78,4 @@
         </section>
     </div>
 
-    <footer>
-        <p>© The Lost Group</p>
-    </footer>
-</body>
-
-</html>
+    <?php require dirname(__DIR__).'/includes/footer.php'; ?>
